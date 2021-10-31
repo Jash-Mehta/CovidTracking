@@ -3,6 +3,8 @@ import 'package:covid_tracking/model/apidata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'chart.dart';
+
 class TrackingCovid extends StatefulWidget {
   const TrackingCovid({Key? key}) : super(key: key);
 
@@ -220,7 +222,10 @@ class _TrackingCovidState extends State<TrackingCovid> {
                   ),
                   Center(
                       child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (_) => Chart()));
+                          },
                           style: ButtonStyle(
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.green[700])),
@@ -231,7 +236,8 @@ class _TrackingCovidState extends State<TrackingCovid> {
                           )))
                 ]);
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(color: Colors.white));
           }
         },
       )),
