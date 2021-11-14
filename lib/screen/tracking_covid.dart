@@ -80,9 +80,9 @@ class _TrackingCovidState extends State<TrackingCovid> {
                   ),
                   Row(children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 5.0),
+                      margin: const EdgeInsets.only(left: 18.0),
                       height: 130.0,
-                      width: 180.0,
+                      width: MediaQuery.of(context).size.width * 0.45,
                       decoration: BoxDecoration(
                           color: Colors.orange,
                           borderRadius: BorderRadius.circular(10.0)),
@@ -113,9 +113,9 @@ class _TrackingCovidState extends State<TrackingCovid> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(left: 20.0),
+                      margin: const EdgeInsets.only(left: 10.0),
                       height: 130.0,
-                      width: 180.0,
+                      width: MediaQuery.of(context).size.width * 0.45,
                       decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(10.0)),
@@ -151,9 +151,9 @@ class _TrackingCovidState extends State<TrackingCovid> {
                   ),
                   Row(children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 5.0),
+                      margin: const EdgeInsets.only(left: 15.0),
                       height: 130.0,
-                      width: 180.0,
+                      width: MediaQuery.of(context).size.width * 0.45,
                       decoration: BoxDecoration(
                           color: Colors.green,
                           borderRadius: BorderRadius.circular(10.0)),
@@ -184,9 +184,9 @@ class _TrackingCovidState extends State<TrackingCovid> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(left: 20.0),
+                      margin: const EdgeInsets.only(left: 10.0),
                       height: 130.0,
-                      width: 180.0,
+                      width: MediaQuery.of(context).size.width * 0.45,
                       decoration: BoxDecoration(
                           color: Colors.lightBlue,
                           borderRadius: BorderRadius.circular(10.0)),
@@ -229,10 +229,10 @@ class _TrackingCovidState extends State<TrackingCovid> {
                           style: ButtonStyle(
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.green[700])),
-                          child: Container(
+                          child: const SizedBox(
                             height: 50.0,
-                            width: 250.0,
-                            child: const Center(child: Text("NEXT")),
+                            width: 338.0,
+                            child: Center(child: Text("NEXT")),
                           )))
                 ]);
           } else {

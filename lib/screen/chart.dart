@@ -1,6 +1,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, prefer_const_constructors
 
 import 'package:covid_tracking/api/api_manager.dart';
+import 'package:covid_tracking/maps/maps.dart';
 import 'package:covid_tracking/model/apidata.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,28 +54,33 @@ class _ChartState extends State<Chart> {
                               borderRadius: BorderRadius.circular(15.0)),
                           child: Stack(
                             children: [
-                              PieChart(
-                                PieChartData(
-                                  pieTouchData: PieTouchData(touchCallback:
-                                      (FlTouchEvent event, pieTouchResponse) {
-                                    setState(() {
-                                      if (!event.isInterestedForInteractions ||
-                                          pieTouchResponse == null ||
-                                          pieTouchResponse.touchedSection ==
-                                              null) {
-                                        touchedIndex = -1;
-                                        return;
-                                      }
-                                      touchedIndex = pieTouchResponse
-                                          .touchedSection!.touchedSectionIndex;
-                                    });
-                                  }),
-                                  borderData: FlBorderData(
-                                    show: false,
+                              Container(
+                                margin: EdgeInsets.only(left: 30.0),
+                                child: PieChart(
+                                  PieChartData(
+                                    pieTouchData: PieTouchData(touchCallback:
+                                        (FlTouchEvent event, pieTouchResponse) {
+                                      setState(() {
+                                        if (!event
+                                                .isInterestedForInteractions ||
+                                            pieTouchResponse == null ||
+                                            pieTouchResponse.touchedSection ==
+                                                null) {
+                                          touchedIndex = -1;
+                                          return;
+                                        }
+                                        touchedIndex = pieTouchResponse
+                                            .touchedSection!
+                                            .touchedSectionIndex;
+                                      });
+                                    }),
+                                    borderData: FlBorderData(
+                                      show: false,
+                                    ),
+                                    sectionsSpace: 2,
+                                    centerSpaceRadius: 40,
+                                    sections: showingSections(snapshot),
                                   ),
-                                  sectionsSpace: 2,
-                                  centerSpaceRadius: 40,
-                                  sections: showingSections(snapshot),
                                 ),
                               ),
                               Column(
@@ -148,6 +154,9 @@ class _ChartState extends State<Chart> {
                                             fontWeight: FontWeight.w500),
                                       ),
                                     ],
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
                                   )
                                 ],
                               )
@@ -177,7 +186,7 @@ class _ChartState extends State<Chart> {
                 }
               }),
           SizedBox(
-            height: 40.0,
+            height: 30.0,
           ),
           Container(
             margin: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -189,7 +198,7 @@ class _ChartState extends State<Chart> {
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 CircularProgressIndicator(color: Colors.black),
                 Center(
                   child: Text(
@@ -203,7 +212,24 @@ class _ChartState extends State<Chart> {
                 ),
               ],
             ),
-          )
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          ElevatedButton(
+              onPressed: (){
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => MapScreen()));
+              },
+              
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.green[700])),
+              child: Container(
+                height: 50.0,
+                width: 338.0,
+                child: const Center(child: Text("NEXT")),
+              ))
         ]),
       ),
     );
