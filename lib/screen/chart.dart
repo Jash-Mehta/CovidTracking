@@ -30,7 +30,23 @@ class _ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[800],
+      appBar: AppBar(
+          title: const Text(
+            "Covid Tracking",
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                CupertinoIcons.back,
+                color: Colors.black,
+              ))),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(children: [
           FutureBuilder(
@@ -41,9 +57,6 @@ class _ChartState extends State<Chart> {
                 try {
                   return Column(
                     children: <Widget>[
-                      const SizedBox(
-                        height: 18,
-                      ),
                       Container(
                           height: 300.0,
                           width: 383.0,
@@ -51,9 +64,38 @@ class _ChartState extends State<Chart> {
                               left: 10.0, right: 10.0, top: 10.0),
                           decoration: BoxDecoration(
                               color: Colors.white,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0xDD000000),
+                                  offset: Offset(
+                                    5.0,
+                                    5.0,
+                                  ),
+                                  blurRadius: 10.0,
+                                  spreadRadius: 2.0,
+                                ), //BoxShadow
+                                BoxShadow(
+                                  color: Colors.white,
+                                  offset: Offset(0.0, 0.0),
+                                  blurRadius: 0.0,
+                                  spreadRadius: 0.0,
+                                ), //BoxShadow
+                              ],
                               borderRadius: BorderRadius.circular(15.0)),
                           child: Stack(
                             children: [
+                              Container(
+                                height: 350.0,
+                                width: 350.0,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  colorFilter: ColorFilter.mode(
+                                      Colors.white.withOpacity(0.7),
+                                      BlendMode.dstATop),
+                                  image: AssetImage('assets/d2.png'),
+                                )),
+                              ),
                               Container(
                                 margin: EdgeInsets.only(left: 30.0),
                                 child: PieChart(
@@ -83,8 +125,10 @@ class _ChartState extends State<Chart> {
                                   ),
                                 ),
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Row(
                                     children: const [
@@ -101,9 +145,6 @@ class _ChartState extends State<Chart> {
                                       )
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 10.0,
-                                  ),
                                   Row(
                                     children: const [
                                       Icon(
@@ -118,9 +159,6 @@ class _ChartState extends State<Chart> {
                                             fontWeight: FontWeight.w500),
                                       )
                                     ],
-                                  ),
-                                  SizedBox(
-                                    height: 10.0,
                                   ),
                                   Row(
                                     children: const [
@@ -137,9 +175,6 @@ class _ChartState extends State<Chart> {
                                       )
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 10.0,
-                                  ),
                                   Row(
                                     children: const [
                                       Icon(
@@ -155,9 +190,6 @@ class _ChartState extends State<Chart> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 10.0,
-                                  )
                                 ],
                               )
                             ],
@@ -186,49 +218,27 @@ class _ChartState extends State<Chart> {
                 }
               }),
           SizedBox(
-            height: 30.0,
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 10.0, right: 10.0),
-            height: 300.0,
-            width: 383.0,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                CircularProgressIndicator(color: Colors.black),
-                Center(
-                  child: Text(
-                    "Coming Soon",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
             height: 20.0,
           ),
           ElevatedButton(
-              onPressed: (){
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => MapScreen()));
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => MapScreen()));
               },
-              
               style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(Colors.green[700])),
+                  elevation: MaterialStateProperty.all<double>(10.0),
+                  shadowColor: MaterialStateProperty.all<Color>(Colors.black87),
+                  side: MaterialStateProperty.all(
+                      BorderSide(color: Colors.black, width: 1.5)),
+                  backgroundColor: MaterialStateProperty.all(Colors.white)),
               child: Container(
                 height: 50.0,
                 width: 338.0,
-                child: const Center(child: Text("NEXT")),
+                child: Center(
+                    child: Text(
+                  "NEXT",
+                  style: TextStyle(color: Colors.black),
+                )),
               ))
         ]),
       ),
