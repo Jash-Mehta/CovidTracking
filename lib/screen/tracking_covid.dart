@@ -32,19 +32,18 @@ class _TrackingCovidState extends State<TrackingCovid> {
       appBar: AppBar(
         title: const Text(
           "Covid Tracking",
-    
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0.0,
-        leading:  IconButton(
-              onPressed: () => ZoomDrawer.of(context)!.toggle(),
-              icon:   const Icon(
-                Icons.clear_all,
-                size: 35.0,
-                color: Colors.black,
-              ),
+        leading: IconButton(
+          onPressed: () => ZoomDrawer.of(context)!.toggle(),
+          icon: const Icon(
+            Icons.clear_all,
+            size: 35.0,
+            color: Colors.black,
+          ),
         ),
         actions: const [
           Icon(

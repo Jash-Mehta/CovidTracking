@@ -1,8 +1,16 @@
-import 'package:covid_tracking/screen/tracking_covid.dart';
 import 'package:covid_tracking/widget/maindrawer.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+import 'model/senderdetail.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await Hive.initFlutter();
+  Hive.registerAdapter(SenderDetailAdapter());
+  await Hive.openBox('senderdetail');
   runApp(const MyApp());
 }
 
@@ -18,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:  MainDrawer(),
+      home: MainDrawer(),
     );
   }
 }
