@@ -1,7 +1,15 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:covid_tracking/api/firebaseapi.dart';
 import 'package:covid_tracking/model/senderdetail.dart';
+import 'package:covid_tracking/widget/appbar.dart';
+import 'package:covid_tracking/widget/buttons.dart';
+import 'package:covid_tracking/widget/text.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -29,27 +37,16 @@ double? latitude;
 double? longitude;
 String? names;
 String? senderaddress;
+File? file;
+UploadTask? task;
+String files = "Covid document";
 
 class _SendrequestState extends State<Sendrequest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: const Text(
-              "Booking Request",
-              style: TextStyle(color: Colors.black),
-            ),
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            elevation: 0.0,
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  CupertinoIcons.back,
-                  color: Colors.black,
-                ))),
+        appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(70), child: StartingBar()),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -65,15 +62,19 @@ class _SendrequestState extends State<Sendrequest> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: SingleChildScrollView(
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Send Request",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 25.0,
-                                          fontWeight: FontWeight.bold),
+                                    child: Center(
+                                      child: Text(
+                                        "Send Request",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 25.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ),
                                   const Padding(
@@ -87,14 +88,10 @@ class _SendrequestState extends State<Sendrequest> {
                                           fontWeight: FontWeight.w400),
                                     ),
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        left: 15.0, right: 15.0, top: 20.0),
+                                  HeightContainer(
                                     height: 50.0,
-                                    width: double.infinity,
                                     child: TextFormField(
                                       initialValue: names,
-
                                       decoration: InputDecoration(
                                           focusedBorder: OutlineInputBorder(
                                               borderSide: const BorderSide(
@@ -107,17 +104,13 @@ class _SendrequestState extends State<Sendrequest> {
                                               borderRadius:
                                                   BorderRadius.circular(10.0))),
                                       keyboardType: TextInputType.name,
-                                      // controller: controllerName,
                                       onChanged: (value) {
                                         name = value;
                                       },
                                     ),
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        left: 15.0, right: 15.0, top: 20.0),
+                                  HeightContainer(
                                     height: 120.0,
-                                    width: double.infinity,
                                     child: TextFormField(
                                       initialValue: senderaddress,
                                       decoration: InputDecoration(
@@ -140,11 +133,8 @@ class _SendrequestState extends State<Sendrequest> {
                                       },
                                     ),
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        left: 15.0, right: 15.0, top: 20.0),
+                                  HeightContainer(
                                     height: 50.0,
-                                    width: double.infinity,
                                     child: TextFormField(
                                       decoration: InputDecoration(
                                           focusedBorder: OutlineInputBorder(
@@ -163,11 +153,8 @@ class _SendrequestState extends State<Sendrequest> {
                                       },
                                     ),
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        left: 15.0, right: 15.0, top: 20.0),
+                                  HeightContainer(
                                     height: 50.0,
-                                    width: double.infinity,
                                     child: TextFormField(
                                       decoration: InputDecoration(
                                           focusedBorder: OutlineInputBorder(
@@ -187,66 +174,83 @@ class _SendrequestState extends State<Sendrequest> {
                                     ),
                                   ),
                                   const SizedBox(
-                                    height: 20.0,
+                                    height: 10.0,
                                   ),
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        if (latitude! > 22 && latitude! < 23) {
-                                          // Sending data to the localDatabase(hive)........
-                                          var getDname = name;
-                                          var getDaddress = address;
-                                          var box = Hive.box('senderdetail');
-                                          box.put('name', getDname);
-                                          box.put('address', getDaddress);
-                                          // Sending Data Users data to firebase
-                                          if (names != null && senderaddress!=null) {
-                                            reference.add({
-                                              'Name': names,
-                                              'Address': senderaddress,
-                                              'Contact': contact,
-                                              'Age': age
-                                            }).then((value) =>
-                                                Navigator.pop(context));
-                                          } else {
-                                            reference.add({
-                                              'Name': name,
-                                              'Address': address,
-                                              'Contact': contact,
-                                              'Age': age
-                                            }).then((value) =>
-                                                Navigator.pop(context));
-                                          }
-                                        } else {
-                                          print(
-                                            "Service is not avaible in your area.....",
-                                          );
-
-                                          Navigator.pop(context);
-                                        }
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 30.0),
+                                    child: Text(
+                                      "Upload the report of COVID",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 30.0),
+                                    child: Buttons(
+                                      height: 30.0,
+                                      width: 30.0,
+                                      text: "",
+                                      icon: Icons.upload,
+                                      onpressed: () {
+                                              /**
+                                             * !Select file from the local devices.......
+                                             * */
+                                        selectfile();
                                       },
-                                      style: ButtonStyle(
-                                          elevation:
-                                              MaterialStateProperty.all<double>(
-                                                  10.0),
-                                          shadowColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  Colors.black87),
-                                          side: MaterialStateProperty.all(
-                                              const BorderSide(
-                                                  color: Colors.black,
-                                                  width: 1.5)),
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.white)),
-                                      child: const SizedBox(
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Center(
+                                    child: Buttons(
+                                        icon: Icons.verified,
                                         height: 40.0,
                                         width: 80.0,
-                                        child: Center(
-                                            child: Text(
-                                          "SUBMIT",
-                                          style: TextStyle(color: Colors.black),
-                                        )),
-                                      )),
+                                        onpressed: () {
+                                          if (latitude! > 22 &&
+                                              latitude! < 23) {
+                                            /**
+                                             * !Sending data to the localDatabase(hive)........
+                                             * */
+                                            var getDname = name;
+                                            var getDaddress = address;
+                                            var box = Hive.box('senderdetail');
+                                            box.put('name', getDname);
+                                            box.put('address', getDaddress);
+                                            /**
+                                             * ! Sending Data Users data to firebase.......
+                                              */
+                                            if (names != null &&
+                                                senderaddress != null) {
+                                              reference.add({
+                                                'Name': names,
+                                                'Address': senderaddress,
+                                                'Contact': contact,
+                                                'Age': age
+                                              }).then((value) =>
+                                                  Navigator.pop(context));
+                                            } else {
+                                              reference.add({
+                                                'Name': name,
+                                                'Address': address,
+                                                'Contact': contact,
+                                                'Age': age
+                                              }).then((value) =>
+                                                  Navigator.pop(context));
+                                            }
+                                            uploadfiles();
+                                          } else {
+                                            print(
+                                              "Service is not avaible in your area.....",
+                                            );
+                                            Navigator.pop(context);
+                                          }
+                                        },
+                                        text: "SUBMIT"),
+                                  ),
                                   const SizedBox(
                                     height: 20.0,
                                   )
@@ -275,14 +279,20 @@ class _SendrequestState extends State<Sendrequest> {
         ));
   }
 
-// to get user current location......
+// ignore: slash_for_doc_comments
+/**
+ * !to get user current location......
+ */
   void getLocation() async {
     var location = await currentLocation.getLocation();
     latitude = location.latitude as double;
     longitude = location.longitude as double;
   }
+// ignore: slash_for_doc_comments
+/**
+ * !to fetch data from hive......
+ */
 
-// to fetch data from hive......
   void getdata() {
     var boxs = Hive.box('senderdetail');
     names = boxs.get('name');
@@ -296,5 +306,35 @@ class _SendrequestState extends State<Sendrequest> {
     setState(() {
       getdata();
     });
+  }
+// ignore: slash_for_doc_comments
+/**
+ * !Selectfiles from the local devices.... 
+ * */
+
+  Future selectfile() async {
+    final result = await FilePicker.platform.pickFiles(
+        allowMultiple: false, allowedExtensions: ['pdf', 'doc', 'jpg']);
+    if (result == null) return;
+    final path = result.files.single.path!;
+    print(path);
+    setState(() {
+      file = File(path);
+    });
+  }
+
+// ignore: slash_for_doc_comments
+/**
+ * !Upload the pdf to the FireStorage......
+  */
+  Future uploadfiles() async {
+    if (file == null) return;
+    final filename = files;
+    final destination = 'files/$filename';
+    task = FirebaseApi.uploadFile(destination, file!);
+    if (task == null) return;
+    final snapshot = await task!.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();
+    print(urlDownload);
   }
 }

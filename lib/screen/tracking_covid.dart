@@ -361,7 +361,9 @@ class _TrackingCovidState extends State<TrackingCovid> {
                             "NEXT",
                             style: TextStyle(color: Colors.black),
                           )),
-                        )))
+                        )
+                        )
+                        )
               ]),
             ]);
           } else {
