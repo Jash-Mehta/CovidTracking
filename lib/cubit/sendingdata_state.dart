@@ -2,7 +2,7 @@ part of 'sendingdata_cubit.dart';
 
 class SendingdataInitial {
   String name;
-  String  address;
+  String address;
   String number;
   String age;
   SendingdataInitial({

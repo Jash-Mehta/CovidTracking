@@ -1,20 +1,12 @@
 class Firebasedata {
-  String ? name;
-  String ? address;
-  String age;
-  String contact;
+  String?   names;
+  String ?  address;
+  var ages;
+  var contacts;
   Firebasedata({
-    required this.name,
+    required this.names,
     required this.address,
-    required this.age,
-    required this.contact,
-  });
-}
-class HiveSendingdata {
-  String ? name;
-  String ? address;
-  HiveSendingdata({
-    required this.name,
-    required this.address,
+    required this.ages,
+    required this.contacts,
   });
 }
