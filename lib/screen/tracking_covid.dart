@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'chart.dart';
 
@@ -45,11 +46,16 @@ class _TrackingCovidState extends State<TrackingCovid> {
             color: Colors.black,
           ),
         ),
-        actions: const [
-          Icon(
-            Icons.notifications_active_outlined,
-            color: Colors.black,
-            size: 30.0,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.call,
+              color: Colors.black,
+              size: 30.0,
+            ),
+            onPressed: () {
+              _launchCaller();
+            },
           )
         ],
       ),
@@ -361,9 +367,7 @@ class _TrackingCovidState extends State<TrackingCovid> {
                             "NEXT",
                             style: TextStyle(color: Colors.black),
                           )),
-                        )
-                        )
-                        )
+                        )))
               ]),
             ]);
           } else {
@@ -373,5 +377,14 @@ class _TrackingCovidState extends State<TrackingCovid> {
         },
       )),
     );
+  }
+
+  _launchCaller() async {
+    const url = "tel:7096747394";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

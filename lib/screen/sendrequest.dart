@@ -30,6 +30,8 @@ class Sendrequest extends StatefulWidget {
   _SendrequestState createState() => _SendrequestState();
 }
 
+final _formKey = GlobalKey<FormState>();
+
 var name, address, age, contact;
 Location currentLocation = Location();
 SenderDetail? senderDetail;
@@ -61,200 +63,224 @@ class _SendrequestState extends State<Sendrequest> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text(
-                                        "Send Request",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 25.0,
-                                            fontWeight: FontWeight.bold),
+                              child: Form(
+                                key: _formKey,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Text(
+                                          "Send Request",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 25.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(10.0),
-                                    child: Text(
-                                      "Note:- Before submitting the form make sure you have enter correct detail",
-                                      textAlign: TextAlign.justify,
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w400),
+                                    const Padding(
+                                      padding: EdgeInsets.all(10.0),
+                                      child: Text(
+                                        "Note:- Before submitting the form make sure you have enter correct detail",
+                                        textAlign: TextAlign.justify,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w400),
+                                      ),
                                     ),
-                                  ),
-                                  HeightContainer(
-                                    height: 50.0,
-                                    child: TextFormField(
-                                      initialValue: names,
-                                      decoration: InputDecoration(
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Colors.black,
-                                                  width: 1.5),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          labelText: "Name",
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0))),
-                                      keyboardType: TextInputType.name,
-                                      onChanged: (value) {
-                                        name = value;
-                                      },
+                                    HeightContainer(
+                                      height: 50.0,
+                                      child: TextFormField(
+                                          initialValue: names,
+                                          decoration: InputDecoration(
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.black,
+                                                      width: 1.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              labelText: "Name",
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0))),
+                                          keyboardType: TextInputType.name,
+                                          onChanged: (value) {
+                                            name = value;
+                                          },
+                                          validator: (value) => value!.isEmpty
+                                              ? "Please enter your name"
+                                              : null),
                                     ),
-                                  ),
-                                  HeightContainer(
-                                    height: 120.0,
-                                    child: TextFormField(
-                                      initialValue: senderaddress,
-                                      decoration: InputDecoration(
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Colors.black,
-                                                  width: 1.5),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          labelText: "Address",
-                                          labelStyle: const TextStyle(
-                                              color: Colors.black45),
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0))),
-                                      keyboardType: TextInputType.multiline,
-                                      maxLines: 20,
-                                      onChanged: (value) {
-                                        address = value;
-                                      },
+                                    HeightContainer(
+                                      height: 120.0,
+                                      child: TextFormField(
+                                          initialValue: senderaddress,
+                                          decoration: InputDecoration(
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.black,
+                                                      width: 1.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              labelText: "Address",
+                                              labelStyle: const TextStyle(
+                                                  color: Colors.black45),
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0))),
+                                          keyboardType: TextInputType.multiline,
+                                          maxLines: 20,
+                                          onChanged: (value) {
+                                            address = value;
+                                          },
+                                          validator: (value) => value!.isEmpty
+                                              ? "Please enter your Address"
+                                              : null),
                                     ),
-                                  ),
-                                  HeightContainer(
-                                    height: 50.0,
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Colors.black,
-                                                  width: 1.5),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          labelText: "ContactNo.",
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0))),
-                                      keyboardType: TextInputType.number,
-                                      onChanged: (value) {
-                                        contact = value;
-                                      },
+                                    HeightContainer(
+                                      height: 50.0,
+                                      child: TextFormField(
+                                          decoration: InputDecoration(
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.black,
+                                                      width: 1.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              labelText: "ContactNo.",
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0))),
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) {
+                                            contact = value;
+                                          },
+                                          validator: (value) => value!.isEmpty
+                                              ? "Please enter your PhoneNo."
+                                              : null),
                                     ),
-                                  ),
-                                  HeightContainer(
-                                    height: 50.0,
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Colors.black,
-                                                  width: 1.5),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          labelText: "Age",
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0))),
-                                      keyboardType: TextInputType.number,
-                                      onChanged: (value) {
-                                        age = value;
-                                      },
+                                    HeightContainer(
+                                      height: 50.0,
+                                      child: TextFormField(
+                                          decoration: InputDecoration(
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.black,
+                                                      width: 1.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              labelText: "Age",
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0))),
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) {
+                                            age = value;
+                                          },
+                                          validator: (value) => value!.isEmpty
+                                              ? "Please enter your Age"
+                                              : null),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.only(left: 30.0),
-                                    child: Text(
-                                      "Upload the report of COVID",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 17.0,
-                                          fontWeight: FontWeight.w400),
+                                    const SizedBox(
+                                      height: 10.0,
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 30.0),
-                                    child: Buttons(
-                                      height: 30.0,
-                                      width: 30.0,
-                                      text: "",
-                                      icon: Icons.upload,
-                                      onpressed: () {
-                                              /**
-                                             * !Select file from the local devices.......
-                                             * */
-                                        selectfile();
-                                      },
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 30.0),
+                                      child: Text(
+                                        "Upload the Documents of COVID",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.w400),
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Center(
-                                    child: Buttons(
-                                        icon: Icons.verified,
-                                        height: 40.0,
-                                        width: 80.0,
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 30.0),
+                                      child: Buttons(
+                                        height: 30.0,
+                                        width: 30.0,
+                                        text: "",
+                                        icon: Icons.upload,
                                         onpressed: () {
-                                          if (latitude! > 22 &&
-                                              latitude! < 23) {
-                                            /**
-                                             * !Sending data to the localDatabase(hive)........
-                                             * */
-                                            var getDname = name;
-                                            var getDaddress = address;
-                                            var box = Hive.box('senderdetail');
-                                            box.put('name', getDname);
-                                            box.put('address', getDaddress);
-                                            /**
-                                             * ! Sending Data Users data to firebase.......
-                                              */
-                                            if (names != null &&
-                                                senderaddress != null) {
-                                              reference.add({
-                                                'Name': names,
-                                                'Address': senderaddress,
-                                                'Contact': contact,
-                                                'Age': age
-                                              }).then((value) =>
-                                                  Navigator.pop(context));
-                                            } else {
-                                              reference.add({
-                                                'Name': name,
-                                                'Address': address,
-                                                'Contact': contact,
-                                                'Age': age
-                                              }).then((value) =>
-                                                  Navigator.pop(context));
-                                            }
-                                            uploadfiles();
-                                          } else {
-                                            print(
-                                              "Service is not avaible in your area.....",
-                                            );
-                                            Navigator.pop(context);
-                                          }
+                                          /**
+                                               * !Select file from the local devices.......
+                                               * */
+                                          selectfile();
                                         },
-                                        text: "SUBMIT"),
-                                  ),
-                                  const SizedBox(
-                                    height: 20.0,
-                                  )
-                                ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Center(
+                                      child: Buttons(
+                                          icon: Icons.verified,
+                                          height: 40.0,
+                                          width: 80.0,
+                                          onpressed: () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              if (latitude! > 22 &&
+                                                  latitude! < 23) {
+                                                /**
+                                               * !Sending data to the localDatabase(hive)........
+                                               * */
+                                                var getDname = name;
+                                                var getDaddress = address;
+                                                var box =
+                                                    Hive.box('senderdetail');
+                                                box.put('name', getDname);
+                                                box.put('address', getDaddress);
+                                                /**
+                                               * ! Sending Data Users data to firebase.......
+                                                */
+                                                if (names != null &&
+                                                    senderaddress != null) {
+                                                  reference.add({
+                                                    'Name': names,
+                                                    'Address': senderaddress,
+                                                    'Contact': contact,
+                                                    'Age': age
+                                                  }).then((value) =>
+                                                      Navigator.pop(context));
+                                                } else {
+                                                  reference.add({
+                                                    'Name': name,
+                                                    'Address': address,
+                                                    'Contact': contact,
+                                                    'Age': age
+                                                  }).then((value) =>
+                                                      Navigator.pop(context));
+                                                }
+                                                uploadfiles();
+                                              } else {
+                                                print(
+                                                  "Service is not avaible in your area.....",
+                                                );
+                                                Navigator.pop(context);
+                                              }
+                                            }
+                                          },
+                                          text: "SUBMIT"),
+                                    ),
+                                    const SizedBox(
+                                      height: 20.0,
+                                    )
+                                  ],
+                                ),
                               ),
                             ));
                       });
@@ -317,7 +343,6 @@ class _SendrequestState extends State<Sendrequest> {
         allowMultiple: false, allowedExtensions: ['pdf', 'doc', 'jpg']);
     if (result == null) return;
     final path = result.files.single.path!;
-    print(path);
     setState(() {
       file = File(path);
     });
@@ -335,6 +360,5 @@ class _SendrequestState extends State<Sendrequest> {
     if (task == null) return;
     final snapshot = await task!.whenComplete(() {});
     final urlDownload = await snapshot.ref.getDownloadURL();
-    print(urlDownload);
   }
 }
