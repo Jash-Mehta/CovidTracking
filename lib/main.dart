@@ -1,4 +1,6 @@
+import 'package:covid_tracking/screen/login.dart';
 import 'package:covid_tracking/widget/maindrawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -26,7 +28,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainDrawer(),
+      home:  FirebaseAuth.instance.currentUser == null
+          ? LoginScreen()
+          : MainDrawer(),
     );
   }
 }

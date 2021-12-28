@@ -1,4 +1,5 @@
 import 'package:covid_tracking/screen/sendrequest.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -97,7 +98,9 @@ class MenuPage extends StatelessWidget {
           ),
           const SizedBox(height: 110),
           ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
               style: ButtonStyle(
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(45.0))),

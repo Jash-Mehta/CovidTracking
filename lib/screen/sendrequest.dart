@@ -1,31 +1,22 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
-
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:covid_tracking/api/firebaseapi.dart';
 import 'package:covid_tracking/cubit/sendingdata_cubit.dart';
-import 'package:covid_tracking/data/firebasedata.dart';
 import 'package:covid_tracking/model/senderdetail.dart';
 import 'package:covid_tracking/widget/appbar.dart';
 import 'package:covid_tracking/widget/buttons.dart';
-import 'package:covid_tracking/widget/text.dart';
+import 'package:covid_tracking/widget/heightcontainer.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
-// import 'package:http/http.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-final CollectionReference reference =
-    firebaseFirestore.collection("SendingRequest");
 
 class Sendrequest extends StatefulWidget {
   const Sendrequest({Key? key}) : super(key: key);
@@ -45,7 +36,7 @@ String? names;
 String? senderaddress;
 File? file;
 UploadTask? task;
-String files = "Covid document";
+var files = FirebaseAuth.instance.currentUser!.uid;
 
 class _SendrequestState extends State<Sendrequest> {
   @override
@@ -272,14 +263,18 @@ class _SendrequestState extends State<Sendrequest> {
                                                       latitude! < 23) {
                                                     var getDname = name;
                                                     var getDaddress = address;
-                                                    var box = Hive.box(
-                                                        'senderdetail');
-                                                    box.put('name', getDname);
-                                                    box.put(
-                                                        'address', getDaddress);
-
+                                                    if (getDname != null) {
+                                                      var box = Hive.box(
+                                                          'senderdetail');
+                                                      box.put('name', getDname);
+                                                    }
+                                                    if (getDaddress != null) {
+                                                      var box = Hive.box(
+                                                          'senderdetail');
+                                                      box.put('address',
+                                                          getDaddress);
+                                                    }
                                                     uploadfiles();
-                                              
                                                     BlocProvider.of<
                                                                 SendingdataCubit>(
                                                             context)
@@ -361,8 +356,7 @@ class _SendrequestState extends State<Sendrequest> {
  * */
 
   Future selectfile() async {
-    final result = await FilePicker.platform.pickFiles(
-        allowMultiple: false, allowedExtensions: ['pdf', 'doc', 'jpg']);
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
     if (result == null) return;
     final path = result.files.single.path!;
     setState(() {
