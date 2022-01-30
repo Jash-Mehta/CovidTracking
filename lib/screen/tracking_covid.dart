@@ -177,6 +177,9 @@ class _TrackingCovidState extends State<TrackingCovid> {
                       ],
                     ),
                   ),
+                  /**
+                   * ! Responsive is left......
+                   */
                   Container(
                     margin: const EdgeInsets.only(left: 10.0),
                     height: 200.0,

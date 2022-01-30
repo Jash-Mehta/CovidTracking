@@ -1,6 +1,6 @@
 class Firebasedata {
-  String ?name;
-  String  ? address;
+  String? name;
+  String? address;
   var ages;
   var contacts;
   Firebasedata({
@@ -8,5 +8,15 @@ class Firebasedata {
     required this.address,
     required this.ages,
     required this.contacts,
+  });
+}
+
+class UserData {
+  var introname;
+
+  var usercontact;
+  UserData({
+    required this.introname,
+    required this.usercontact,
   });
 }

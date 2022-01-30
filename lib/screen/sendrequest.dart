@@ -279,6 +279,7 @@ class _SendrequestState extends State<Sendrequest> {
                                                                 SendingdataCubit>(
                                                             context)
                                                         .submit();
+                                                    Navigator.pop(context);
                                                   } else {
                                                     print(
                                                       "Service is not avaible in your area.....",

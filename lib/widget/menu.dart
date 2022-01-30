@@ -3,7 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class MenuPage extends StatelessWidget {
+class MenuPage extends StatefulWidget {
+  @override
+  State<MenuPage> createState() => _MenuPageState();
+}
+
+class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,6 +105,7 @@ class MenuPage extends StatelessWidget {
           ElevatedButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();
+                setState(() {});
               },
               style: ButtonStyle(
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(

@@ -1,16 +1,24 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:covid_tracking/cubit/sendingdata_cubit.dart';
+import 'package:covid_tracking/data/firebasedata.dart';
+import 'package:covid_tracking/screen/introscreen.dart';
+import 'package:covid_tracking/screen/sendrequest.dart';
 import 'package:covid_tracking/widget/maindrawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
+  final String name;
 
   const OTPScreen({
     Key? key,
     required this.phone,
+    required this.name,
   }) : super(key: key);
 
   @override
@@ -70,126 +78,129 @@ class _OTPScreenState extends State<OTPScreen> {
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          // Container(
-          //     height: 160.0,
-          //     width: 160.0,
-          //     margin: const EdgeInsets.only(top: 70.0),
-          //     child: Image.asset("images/lock.png")),
-          const SizedBox(
-            height: 20.0,
-          ),
-          const Text(
-            "Authenticate Your Account",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 25.0,
-                fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(
-            height: 10.0,
-          ),
-          Container(
-            // margin: EdgeInsets.only(top: 40.0),
-            child: Center(
-              child: Visibility(
-                visible: _verificationCode == null ? false : true,
-                child: Text(
-                  'Code is sent to ${widget.phone}',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w400, fontSize: 26.0),
-                ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        // Container(
+        //     height: 160.0,
+        //     width: 160.0,
+        //     margin: const EdgeInsets.only(top: 70.0),
+        //     child: Image.asset("images/lock.png")),
+        const SizedBox(
+          height: 20.0,
+        ),
+        const Text(
+          "Authenticate Your Account",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Colors.black, fontSize: 25.0, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        Container(
+          // margin: EdgeInsets.only(top: 40.0),
+          child: Center(
+            child: Visibility(
+              visible: _verificationCode == null ? false : true,
+              child: Text(
+                'Code is sent to ${widget.phone}',
+                style: const TextStyle(
+                    fontWeight: FontWeight.w400, fontSize: 26.0),
               ),
             ),
           ),
-          Container(
-            height: 90.0,
-            width: 50.0,
-            color: Colors.white,
-            margin: const EdgeInsets.all(20.0),
-            padding: const EdgeInsets.all(20.0),
-            child: PinPut(
-              textStyle: const TextStyle(color: Colors.white),
-              fieldsCount: 6,
-              onSubmit: (String pin) async {
-                try {
-                  await FirebaseAuth.instance
-                      .signInWithCredential(PhoneAuthProvider.credential(
-                          verificationId: _verificationCode!, smsCode: pin))
-                      .then((value) => {
-                            if (value.user != null)
-                              {
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MainDrawer()),
-                                    (route) => false)
-                              }
-                          });
-                } catch (e) {
-                  check++;
-                  if (check == 5) {
-                    addcurrenttime();
-                    checkboolean();
-                    showDialog(
-                      barrierDismissible: false,
-                      barrierLabel: "Click on Exit",
-                      context: context,
-                      builder: (BuildContext context) {
-                        return alert;
-                      },
-                    );
-                  }
-                  FocusScope.of(context).unfocus();
-                  _scaffoldkey.currentState!
-                      .showSnackBar(SnackBar(content: Text('invalid OTP')));
+        ),
+
+        Container(
+          height: 90.0,
+          width: 50.0,
+          color: Colors.white,
+          margin: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
+          child: PinPut(
+            textStyle: const TextStyle(color: Colors.white),
+            fieldsCount: 6,
+            onSubmit: (String pin) async {
+              try {
+                await FirebaseAuth.instance
+                    .signInWithCredential(PhoneAuthProvider.credential(
+                        verificationId: _verificationCode!, smsCode: pin))
+                    .then((value) => {
+                          if (value.user != null)
+                            {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          IntroductionScreen()),
+                                  (route) => false),
+                            },
+                        });
+              } catch (e) {
+                check++;
+                if (check == 5) {
+                  addcurrenttime();
+                  checkboolean();
+                  showDialog(
+                    barrierDismissible: false,
+                    barrierLabel: "Click on Exit",
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alert;
+                    },
+                  );
                 }
-              },
-              focusNode: _pinPutFocusNode,
-              controller: _pinPutController,
-              submittedFieldDecoration: _pinPutDecoration.copyWith(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF02B3E8),
-                    Color(0xFF1A55B3),
-                  ],
-                  begin: FractionalOffset(0.0, 0.0),
-                  end: FractionalOffset(1.0, 0.0),
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp,
-                ),
+                FocusScope.of(context).unfocus();
+                _scaffoldkey.currentState!
+                    .showSnackBar(SnackBar(content: Text('invalid OTP')));
+              }
+            },
+            focusNode: _pinPutFocusNode,
+            controller: _pinPutController,
+            submittedFieldDecoration: _pinPutDecoration.copyWith(
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF02B3E8),
+                  Color(0xFF1A55B3),
+                ],
+                begin: FractionalOffset(0.0, 0.0),
+                end: FractionalOffset(1.0, 0.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp,
               ),
-              selectedFieldDecoration: _pinPutDecoration.copyWith(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF02B3E8),
-                    Color(0xFF1A55B3),
-                  ],
-                  begin: FractionalOffset(0.0, 0.0),
-                  end: FractionalOffset(1.0, 0.0),
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp,
-                ),
+            ),
+            selectedFieldDecoration: _pinPutDecoration.copyWith(
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF02B3E8),
+                  Color(0xFF1A55B3),
+                ],
+                begin: FractionalOffset(0.0, 0.0),
+                end: FractionalOffset(1.0, 0.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp,
               ),
-              followingFieldDecoration: _pinPutDecoration.copyWith(
-                borderRadius: BorderRadius.circular(5.0),
-                color: Colors.grey.shade300,
-                border: Border.all(
-                  color: const Color.fromRGBO(2, 179, 232, 1),
-                ),
+            ),
+            followingFieldDecoration: _pinPutDecoration.copyWith(
+              borderRadius: BorderRadius.circular(5.0),
+              color: Colors.grey.shade300,
+              border: Border.all(
+                color: const Color.fromRGBO(2, 179, 232, 1),
               ),
             ),
           ),
-          const Center(
-            child: Text(
+        ),
+
+        Center(
+          child: GestureDetector(
+            onTap: () => _verifyPhone(),
+            child: const Text(
               "Didn't receive code? Request again.",
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w400),
             ),
           ),
-        ]),
-      ),
+        ),
+      ])),
     );
   }
 
@@ -204,7 +215,7 @@ class _OTPScreenState extends State<OTPScreen> {
               // print('user logged in');
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => MainDrawer()),
+                  MaterialPageRoute(builder: (context) => IntroductionScreen()),
                   (route) => false);
             }
           });

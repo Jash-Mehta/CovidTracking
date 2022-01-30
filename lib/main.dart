@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import 'model/senderdetail.dart';
 
 Future<void> main() async {
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:  FirebaseAuth.instance.currentUser == null
+      home: FirebaseAuth.instance.currentUser == null
           ? LoginScreen()
           : MainDrawer(),
     );
